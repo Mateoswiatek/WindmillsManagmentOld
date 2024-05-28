@@ -1,3 +1,5 @@
+@model windmillsManagement.Models.Windmill
+
 @{
     ViewData["Title"] = "Wiatrak";
     var test = "test";
@@ -5,6 +7,8 @@
 
 <div class="text-center">
     <h1 class="display-4">Mamy nasz widok Wiatraka!</h1>
-    <p>@test</p>
+    <p>Name: @Model.Name</p>
+    <p>Lat: @Model.Latitude</p>
+    <p>Lon: @Model.Longitude</p>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>

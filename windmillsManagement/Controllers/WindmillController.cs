@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using windmillsManagement.Models;
 
 namespace windmillsManagement.Controllers;
@@ -24,7 +25,22 @@ public class WindmillController : Controller
     public IActionResult Windmill(Guid guid)
     {
         _logger.LogInformation("guid: {}", guid);
-        return View();
+
+        var windmill = new Windmill()
+        {
+            Guid = default,
+            Name = "nazwa1",
+            Description = "Opis przykładowego",
+            Latitude = 0,
+            Longitude = 0,
+            Height = 100.25,
+            DateOfLastVisit = default,
+            WindPark = null,
+            WindmillEquipments = null,
+            Visits = null
+        };
+        
+        return View(windmill);
     }
     
     //https://localhost:7214/windmills?page=2&size=20
@@ -35,20 +51,15 @@ public class WindmillController : Controller
         
         //Tutaj np będzie zwracana również nazwa windparku / numer, i po nim bedzie przekierowanie, choc to to 
         // już po stornie fronta można zorbić.
+        var windmills = MockWindmills();
         
-        return View();
+        var pageNumber = page ?? 1;
+        var pageSize = size ?? 5;
+        var pagedWindmills = windmills.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+        // _windmillService.GetPagedWindmills(pageNumber, currentPageSize);
         
-        // int pageNumber = page ?? 0;
-        // int currentPageSize = pageSize ?? 10; // Domyślna wielkość strony (jeśli nie podano przez użytkownika)
-        //
-        // // Pobierz wiatraki tylko dla danej strony
-        // var pagedWindmills = _windmillService.GetPagedWindmills(pageNumber, currentPageSize);
-        //
-        // // Zaloguj informacje o stronnicowaniu
-        // _logger.LogInformation($"Wyświetlono stronę {pageNumber} z wiatrakami (pageSize: {currentPageSize})");
-        //
-        // // Przekaż stronnicowaną listę do widoku
-        // return View(pagedWindmills);
+        
+        return View(pagedWindmills);
     }
 
     public IActionResult Redirect()
@@ -61,5 +72,30 @@ public class WindmillController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+    
+    
+    // Metoda zwracająca zmockowaną listę wiatraków
+    private static List<Windmill> MockWindmills()
+    {
+        var windmills = new List<Windmill>();
+        for (int i = 0; i < 20; i++)
+        {
+            var windmill = new Windmill()
+            {
+                Guid = Guid.NewGuid(),
+                Name = "Windmill " + i,
+                Description = "Opis przykładowego",
+                Latitude = 0,
+                Longitude = 0,
+                Height = 100.25,
+                DateOfLastVisit = DateTime.Now,
+                WindPark = null,
+                WindmillEquipments = null,
+                Visits = null
+            };
+            windmills.Add(windmill);
+        }
+        return windmills;
     }
 }
