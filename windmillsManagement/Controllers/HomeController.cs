@@ -15,6 +15,9 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        ViewBag.Name = "Moje Imię";
+        ViewData["Nazwa2"] = "Moje Drugie Imie 123";
+        TempData["NazwaTemp"] = "Moja nazwa Tempowa";
         return View();
     }
 
@@ -22,11 +25,6 @@ public class HomeController : Controller
     {
         return View();
     }
-
-    // public IActionResult Windmill()
-    // {
-    //     return View();
-    // }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

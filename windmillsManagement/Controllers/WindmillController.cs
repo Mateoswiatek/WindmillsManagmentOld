@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using windmillsManagement.Models;
 
 namespace windmillsManagement.Controllers;
@@ -42,9 +41,28 @@ public class WindmillController : Controller
         
         return View(windmill);
     }
+
+    //TODO czy tak się powinno obsługiwać formularze?
+    [HttpGet]
+    public IActionResult AddWindmill()
+    {
+        return View();
+    }
+    
+    [HttpPost]
+    public IActionResult AddWindmill(Windmill windmill)
+    {
+        // Logika dodawania Encji do bazy danych
+        
+        //To zawsze będzie metodą get, więc zawsze nam wróci
+        // do pustego formularza i straci kontekst przekazanych
+        // danych
+        return RedirectToAction("AddWindmill");
+    }
     
     //https://localhost:7214/windmills?page=2&size=20
     [Route("windmills")]
+    [HttpGet]
     public IActionResult WindmillList(int? page, int? size)
     {
         _logger.LogInformation("tutaj będzie sobie lista , page: {}, size: {}", page, size);
