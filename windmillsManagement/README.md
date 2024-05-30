@@ -1,3 +1,7 @@
+Przemigrować do CQRSa
+
+Jednak zwykłe service się tu tez przydzadzą.
+
 Tipy
 Pętle i warunki w widokach, można wsm chyba użyć
 przy katagolowaniu wyposarzenia - tak aby np

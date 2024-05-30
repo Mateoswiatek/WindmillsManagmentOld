@@ -6,7 +6,8 @@ namespace windmillsManagement.Controllers;
 
 public class WindmillController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<WindmillController> _logger;
+    private readonly IWindmillServices _windmillServices;
 
     // wyświetlenie wszystkich windparków po parametrach "lokalizacji"
     // np będziemy mieli osadzoną mapę, i dostaniemy zakresy szerokości i długości.
@@ -15,9 +16,11 @@ public class WindmillController : Controller
     // po prostu zrobimy wyszukiwanie z filtrem. i w tedy w windparkach, będziemy zwracać efekt takiego
     // wyszukania, gdzie windpark==this.
     
-    public WindmillController(ILogger<HomeController> logger)
+    public WindmillController(ILogger<WindmillController> logger, 
+        IWindmillServices windmillServices)
     {
         _logger = logger;
+        _windmillServices = windmillServices;
     }
 
     [Route("windmills/{guid}")]
@@ -46,13 +49,28 @@ public class WindmillController : Controller
     [HttpGet]
     public IActionResult AddWindmill()
     {
-        return View();
+        
+        var windmill = new Windmill
+        {
+            Name = "Domyślna nazwa"
+        };
+        return View(windmill);
     }
     
     [HttpPost]
     public IActionResult AddWindmill(Windmill windmill)
     {
+        // if (!ModelState.IsValid)
+        // {
+        //     return View(windmill);
+        // }
+
+        var guid = _windmillServices.Save(windmill);
+        
+        
         // Logika dodawania Encji do bazy danych
+
+        TempData["Guid"] = guid;
         
         //To zawsze będzie metodą get, więc zawsze nam wróci
         // do pustego formularza i straci kontekst przekazanych
